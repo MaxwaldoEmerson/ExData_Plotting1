@@ -1,13 +1,5 @@
-df <- read.table("household_power_consumption.txt", skip = 66637, nrow = 2880, sep = ";")
-name <- sapply(read.table("household_power_consumption.txt", nrow = 1, sep = ";"), as.character)
-names(df) <- name
-df$DateTime <- strptime(paste(df$Date, df$Time), format="%d/%m/%Y %H:%M:%S")
-for( i in 3:9 ){
-    df[[i]] <- sapply(df[[i]], as.character)
-    df[[i]] <- sapply(df[[i]], as.numeric)
-}
-with(df, plot(DateTime, Global_active_power, type = "n", xlab = "daytime", ylab = "Global Active Power (kilowatts)" , axes = F, frame.plot=TRUE))
-axis(1, at=c(as.numeric(min(df$DateTime)), as.numeric(min(df$DateTime))+86400
-             , as.numeric(min(df$DateTime))+2*86400), labels=c("Thu", "Fri", "Sat"))
-axis(2, yaxs = "r")
-with(df, points(DateTime, Global_active_power, type = "l"))
+newdata <- mydata[mydata$Date == "1/2/2007" | mydata$Date == "2/2/2007",]
+newdata$Date <- as.Date(newdata$Date, format = "%d/%m/%Y")
+newdata$Global_active_power <- as.numeric(levels(newdata$Global_active_power))[newdata$Global_active_power]
+newdata$DateTime <- as.POSIXct(paste(newdata$Date, newdata$Time))
+with(newdata, plot(newdata$DateTime, newdata$Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)", xlab = " "))
